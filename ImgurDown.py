@@ -24,6 +24,7 @@ class ImgurDown:
         dirpath = os.path.dirname(__file__) # absolute dir
         relpath = "tmp"
         abspath = os.path.join(dirpath, relpath) # create path to image directory
+        totalmisses = 0 # count total invalid URLs
         
         try:
             shutil.rmtree(abspath) # delete image directory if it exists
@@ -38,13 +39,16 @@ class ImgurDown:
             print "error making directoy"
             
             
-        for i in range(0,n):            
+        for i in range(0,n):
+            miss = 0
             url = self.createURL() # generate random imgur url
 
-            # test if theurl is invalid 
+            # test if the url is invalid 
             while(urllib.urlopen(url).geturl() == "http://i.imgur.com/removed.png"):
+                miss = miss + 1 # count number of invalid URLs
                 url = self.createURL() # if url is invalid try another
 
+            totalmisses = totalmisses + miss # add up all invalid URLs
             dirpath = os.path.dirname(__file__) # absolute dir 
             relpath = "tmp/" + str(i) + ".png" # create path to image directory
             altpath = "tmp/" + str(i) + ".jpg" # final images will be jpg
@@ -53,7 +57,7 @@ class ImgurDown:
                 
             try:           
                 f = open(abspath, "wb")
-                print str(i) + " " + urllib.urlopen(url).geturl() 
+                print str(i) + ". found valid URL: " + urllib.urlopen(url).geturl() + " after " + str(miss) + " failed attempts." 
                 f.write(urllib.urlopen(url).read()) # get image from url              
                 f.close()
                 im = Image.open(abspath) 
@@ -67,6 +71,10 @@ class ImgurDown:
                 
             except Exception, e:
                 print e
+                
+        # printfinal stats of run
+        print "There were " + str(n) + " successful attempts and " + str(totalmisses) + " failed attempts. "
+        print "The success rate was " + "{0:.2f}".format(100 * (float(n) / (n + totalmisses))) + "%"
             
 
 def main():  # test case    
