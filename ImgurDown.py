@@ -15,7 +15,7 @@ class ImgurDown:
 
     def createURL(self):        
         r = ""
-        for i in range(0,5): # randomly generates 5 char string 
+        for i in range(0, 5): # randomly generates 5 char string 
             r = r + self.keys[random.randint(0,61)]
         s = "http://i.imgur.com/" + r + ".png" # append to url
         return s
@@ -79,7 +79,7 @@ class ImgurDown:
 
 def main():  # test case    
     testobj = ImgurDown()
-    testobj.download(10)
+    testobj.download(20) # note change value to specify how many images should be fetched
 
 if __name__ == '__main__':
     main()
