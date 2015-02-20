@@ -36,7 +36,7 @@ class ImgurDown:
             os.makedirs("tmp") # make the image directoy
 
         except:
-            print "error making directory"
+            print "error making directoy"
             
             
         for i in range(0,n):
